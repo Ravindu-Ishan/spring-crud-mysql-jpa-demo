@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .  # Build from the current directory
+      dockerfile: Dockerfile  # Specify your Dockerfile
+    ports:
+      - "9000:9000"  # Map host port 8080 to container port 8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/springCrudDemoDb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db  # Ensure the db service starts before the app
+
+  db:
+    image: mysql:5.7  # Use MySQL version 5.7
+    restart: always  # Restart the container if it stops
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Set root password
+      MYSQL_DATABASE: springCrudDemoDb  # Create a default database
+    ports:
+      - "3333:3306"  # Map host port 3333 to container port 3306
+    volumes:
+      - db_data:/var/lib/mysql  # Create a named volume for MySQL data
+
+volumes:
+  db_data:  # Define the named volume
